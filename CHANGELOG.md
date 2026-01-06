@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.4](https://github.com/iop098321qwe/chezmod/compare/v0.0.3...v0.0.4) (2026-01-06)
+
+
+### Features
+
+* **alias:** add `chdiff` alias ([e0b92b6](https://github.com/iop098321qwe/chezmod/commit/e0b92b6071ed987ad4b7587d83ee7c303ce4cf20))
+
 ## [0.0.3](https://github.com/iop098321qwe/chezmod/compare/v0.0.2...v0.0.3) (2026-01-06)
 
 
