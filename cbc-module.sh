@@ -2,7 +2,7 @@
 
 # chezmoi aliases
 alias ch='chezmoi'
-alias chad='chezmoi add'
+alias chad='chezmoi add -p'
 alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
 alias chd='chezmoi cd'
 # alias chup='gum confirm "Run chezmoi update?" && chezmoi update'
