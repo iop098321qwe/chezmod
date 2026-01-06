@@ -5,9 +5,39 @@ alias ch='chezmoi'
 alias chad='chezmoi add'
 alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
 alias chd='chezmoi cd'
-alias chra='gum confirm "Run chezmoi re-add?" && chezmoi re-add'
 # alias chup='gum confirm "Run chezmoi update?" && chezmoi update'
 alias chup='chupp'
+
+
+function chra() {
+  for cmd in chezmoi gum delta bat; do
+    command -v "$cmd" >/dev/null 2>&1 || { echo "Error: missing $cmd"; return 1; }
+  done
+
+  echo "Previewing changes (reverse diff; scripts excluded):"
+  echo "---------------------------------------------------"
+
+  if chezmoi diff --reverse -x scripts --no-pager --quiet >/dev/null 2>&1; then
+    echo "No file changes detected (with current diff filters)."
+    return 0
+  fi
+
+  # chezmoi diff --reverse -x scripts --no-pager | delta | bat || {
+  chezmoi diff --reverse -x scripts --no-pager | delta || {
+    echo "Error: diff preview command failed."
+    return 1
+  }
+
+  echo "---------------------------------------------------"
+
+  gum confirm "Apply these changes with 'chezmoi re-add'?" || {
+    echo "Canceled. No changes applied."
+    return 0
+  }
+
+  echo "Running: chezmoi re-add"
+  chezmoi re-add
+}
 
 function chupp() {
   # --- Dependency checks ---
