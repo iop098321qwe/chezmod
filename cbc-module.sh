@@ -7,6 +7,7 @@ alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
 alias chd='chezmoi cd'
 # alias chup='gum confirm "Run chezmoi update?" && chezmoi update'
 alias chup='chupp'
+alias chdiff='chezmoi diff --reverse -x scripts --no-pager | delta'
 
 
 function chra() {
