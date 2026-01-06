@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.3](https://github.com/iop098321qwe/chezmod/compare/v0.0.2...v0.0.3) (2026-01-06)
+
+
+### Bug Fixes
+
+* **function:** remove `--reverse` from `chupp` function ([2f8c537](https://github.com/iop098321qwe/chezmod/commit/2f8c5371bdd68160aa085fd83d630409e765be1d))
+
 ## 0.0.2 (2026-01-06)
 
 
