@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.5](https://github.com/iop098321qwe/chezmod/compare/v0.0.4...v0.0.5) (2026-01-22)
+
+
+### Bug Fixes
+
+* remove temporary `chup` alias for `chupp` ([a9ed337](https://github.com/iop098321qwe/chezmod/commit/a9ed3378e2d0f28de246192ee7ec6087739147bf))
+
 ## [0.0.4](https://github.com/iop098321qwe/chezmod/compare/v0.0.3...v0.0.4) (2026-01-06)
 
 
