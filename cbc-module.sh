@@ -5,8 +5,6 @@ alias ch='chezmoi'
 alias chad='chezmoi add -p'
 alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
 alias chd='chezmoi cd'
-# alias chup='gum confirm "Run chezmoi update?" && chezmoi update'
-alias chup='chupp'
 alias chdiff='chezmoi diff --reverse -x scripts --no-pager | delta'
 
 
@@ -40,7 +38,7 @@ function chra() {
   chezmoi re-add
 }
 
-function chupp() {
+function chup() {
   # --- Dependency checks ---
   for cmd in chezmoi gum delta bat; do
     if ! command -v "$cmd" >/dev/null 2>&1; then
