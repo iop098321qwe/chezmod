@@ -2,10 +2,75 @@
 
 # chezmoi aliases
 alias ch='chezmoi'
-alias chad='chezmoi add -p'
 alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
 alias chd='chezmoi cd'
 alias chdiff='chezmoi diff --reverse -x scripts --no-pager | delta'
+
+
+function chad() {
+  for cmd in chezmoi gum; do
+    command -v "$cmd" >/dev/null 2>&1 || { echo "Error: missing $cmd"; return 1; }
+  done
+
+  if [ "$#" -gt 0 ]; then
+    gum confirm "Add file(s) with 'chezmoi add -p'?" || {
+      echo "Canceled. No files added."
+      return 0
+    }
+
+    chezmoi add -p "$@"
+    return $?
+  fi
+
+  local -a status_lines=()
+  mapfile -t status_lines < <(chezmoi status) || {
+    echo "Error: failed to read chezmoi status."
+    return 1
+  }
+
+  if [ "${#status_lines[@]}" -eq 0 ]; then
+    echo "No files to add (chezmoi status is clean)."
+    return 0
+  fi
+
+  local selected
+  selected="$(printf '%s\n' "${status_lines[@]}" | gum choose --no-limit --header "Select files to add")" || return 1
+
+  if [ -z "$selected" ]; then
+    echo "No files selected."
+    return 0
+  fi
+
+  local -a selected_files=()
+  while IFS= read -r entry; do
+    [ -z "$entry" ] && continue
+
+    local path
+    if [[ "$entry" == *" "* ]]; then
+      path="${entry#* }"
+    else
+      path="$entry"
+    fi
+
+    path="${path#"${path%%[![:space:]]*}"}"
+
+    if [ -n "$path" ]; then
+      selected_files+=("$path")
+    fi
+  done <<< "$selected"
+
+  if [ "${#selected_files[@]}" -eq 0 ]; then
+    echo "No files selected."
+    return 0
+  fi
+
+  gum confirm "Add selected file(s) with 'chezmoi add -p'?" || {
+    echo "Canceled. No files added."
+    return 0
+  }
+
+  chezmoi add -p -- "${selected_files[@]}"
+}
 
 
 function chra() {
