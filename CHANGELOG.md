@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.6](https://github.com/iop098321qwe/chezmod/compare/v0.0.5...v0.0.6) (2026-02-18)
+
+
+### Features
+
+* **function:** add chad interactive add ([cf66979](https://github.com/iop098321qwe/chezmod/commit/cf669792f6faf543775786b7e6e4821437906882))
+
 ## [0.0.5](https://github.com/iop098321qwe/chezmod/compare/v0.0.4...v0.0.5) (2026-01-22)
 
 
