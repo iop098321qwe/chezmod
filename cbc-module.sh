@@ -13,63 +13,76 @@ function chad() {
   done
 
   if [ "$#" -gt 0 ]; then
-    gum confirm "Add file(s) with 'chezmoi add -p'?" || {
+    gum confirm "Add file(s) with 'chezmoi add'?" || {
       echo "Canceled. No files added."
       return 0
     }
 
-    chezmoi add -p "$@"
+    chezmoi add "$@"
     return $?
   fi
 
-  local -a status_lines=()
-  mapfile -t status_lines < <(chezmoi status) || {
-    echo "Error: failed to read chezmoi status."
-    return 1
-  }
+  local globstar_set
+  local nullglob_set
+  local dotglob_set
 
-  if [ "${#status_lines[@]}" -eq 0 ]; then
-    echo "No files to add (chezmoi status is clean)."
+  shopt -q globstar; globstar_set=$?
+  shopt -q nullglob; nullglob_set=$?
+  shopt -q dotglob; dotglob_set=$?
+
+  shopt -s globstar nullglob dotglob
+
+  local -a options=()
+  local entry
+  for entry in **/*; do
+    if [[ "$entry" == ".git" || "$entry" == ".git/"* || "$entry" == */.git || "$entry" == */.git/* ]]; then
+      continue
+    fi
+    options+=("$entry")
+  done
+
+  if [ "$globstar_set" -ne 0 ]; then
+    shopt -u globstar
+  fi
+  if [ "$nullglob_set" -ne 0 ]; then
+    shopt -u nullglob
+  fi
+  if [ "$dotglob_set" -ne 0 ]; then
+    shopt -u dotglob
+  fi
+
+  if [ "${#options[@]}" -eq 0 ]; then
+    echo "No files found."
     return 0
   fi
 
   local selected
-  selected="$(printf '%s\n' "${status_lines[@]}" | gum choose --no-limit --header "Select files to add")" || return 1
+  if ! selected="$(printf '%s\n' "${options[@]}" | gum filter --no-limit \
+    --header "Select files or directories" \
+    --placeholder "Filter...")"; then
+    echo "Canceled. No files added."
+    return 0
+  fi
 
   if [ -z "$selected" ]; then
     echo "No files selected."
     return 0
   fi
 
-  local -a selected_files=()
-  while IFS= read -r entry; do
-    [ -z "$entry" ] && continue
+  local -a selected_items=()
+  mapfile -t selected_items <<< "$selected"
 
-    local path
-    if [[ "$entry" == *" "* ]]; then
-      path="${entry#* }"
-    else
-      path="$entry"
-    fi
-
-    path="${path#"${path%%[![:space:]]*}"}"
-
-    if [ -n "$path" ]; then
-      selected_files+=("$path")
-    fi
-  done <<< "$selected"
-
-  if [ "${#selected_files[@]}" -eq 0 ]; then
-    echo "No files selected."
-    return 0
+  if ! printf '%s\n' "Selected items:" "" "${selected_items[@]}" | gum pager --soft-wrap; then
+    echo "Error: preview failed."
+    return 1
   fi
 
-  gum confirm "Add selected file(s) with 'chezmoi add -p'?" || {
+  gum confirm "Add selected item(s) with 'chezmoi add'?" || {
     echo "Canceled. No files added."
     return 0
   }
 
-  chezmoi add -p -- "${selected_files[@]}"
+  chezmoi add -- "${selected_items[@]}"
 }
 
 
