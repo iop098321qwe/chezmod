@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.8](https://github.com/iop098321qwe/chezmod/compare/v0.0.7...v0.0.8) (2026-02-20)
+
+
+### Features
+
+* **function:** add chfo managed forget picker ([cc3aa84](https://github.com/iop098321qwe/chezmod/commit/cc3aa848cecbc9f2dea6ff4cc080087dca0c29f2))
+
+
+### Bug Fixes
+
+* **function:** skip per-file prompts in chfo ([78044a3](https://github.com/iop098321qwe/chezmod/commit/78044a30b5d387c5247f006bd8c84d399620fd0d))
+
 ## [0.0.7](https://github.com/iop098321qwe/chezmod/compare/v0.0.6...v0.0.7) (2026-02-19)
 
 
