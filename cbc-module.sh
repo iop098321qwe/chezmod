@@ -97,7 +97,7 @@ function chfo() {
       return 0
     }
 
-    chezmoi forget -- "$@"
+    chezmoi forget --force -- "$@"
     return $?
   fi
 
@@ -166,7 +166,7 @@ function chfo() {
     selected_paths+=("$path_prefix$item")
   done
 
-  chezmoi forget -- "${selected_paths[@]}"
+  chezmoi forget --force -- "${selected_paths[@]}"
 }
 
 
