@@ -86,6 +86,90 @@ function chad() {
 }
 
 
+function chfo() {
+  for cmd in chezmoi gum; do
+    command -v "$cmd" >/dev/null 2>&1 || { echo "Error: missing $cmd"; return 1; }
+  done
+
+  if [ "$#" -gt 0 ]; then
+    gum confirm "Forget file(s) with 'chezmoi forget'?" || {
+      echo "Canceled. No files forgotten."
+      return 0
+    }
+
+    chezmoi forget --force -- "$@"
+    return $?
+  fi
+
+  local current_dir
+  current_dir="${PWD%/}"
+  if [ -z "$current_dir" ]; then
+    current_dir="/"
+  fi
+
+  local path_prefix
+  if [ "$current_dir" = "/" ]; then
+    path_prefix="/"
+  else
+    path_prefix="$current_dir/"
+  fi
+
+  local managed_output
+  if ! managed_output="$(chezmoi managed --path-style=absolute --include=files "$current_dir")"; then
+    echo "Error: failed to list managed files."
+    return 1
+  fi
+
+  local -a options=()
+  local entry
+  while IFS= read -r entry; do
+    [ -z "$entry" ] && continue
+    if [[ "$entry" == "$path_prefix"* ]]; then
+      options+=("${entry#"$path_prefix"}")
+    fi
+  done <<< "$managed_output"
+
+  if [ "${#options[@]}" -eq 0 ]; then
+    echo "No managed files found."
+    return 0
+  fi
+
+  local selected
+  if ! selected="$(printf '%s\n' "${options[@]}" | gum filter --no-limit \
+    --header "Select managed files to forget" \
+    --placeholder "Filter...")"; then
+    echo "Canceled. No files forgotten."
+    return 0
+  fi
+
+  if [ -z "$selected" ]; then
+    echo "No files selected."
+    return 0
+  fi
+
+  local -a selected_items=()
+  mapfile -t selected_items <<< "$selected"
+
+  if ! printf '%s\n' "Selected items:" "" "${selected_items[@]}" | gum pager --soft-wrap; then
+    echo "Error: preview failed."
+    return 1
+  fi
+
+  gum confirm "Forget selected item(s) with 'chezmoi forget'?" || {
+    echo "Canceled. No files forgotten."
+    return 0
+  }
+
+  local -a selected_paths=()
+  local item
+  for item in "${selected_items[@]}"; do
+    selected_paths+=("$path_prefix$item")
+  done
+
+  chezmoi forget --force -- "${selected_paths[@]}"
+}
+
+
 function chra() {
   for cmd in chezmoi gum delta bat; do
     command -v "$cmd" >/dev/null 2>&1 || { echo "Error: missing $cmd"; return 1; }
