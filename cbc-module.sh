@@ -6,7 +6,6 @@ alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
 alias chd='chezmoi cd'
 alias chdiff='chezmoi diff --reverse -x scripts --no-pager | delta'
 
-
 function chad() {
   for cmd in chezmoi gum; do
     command -v "$cmd" >/dev/null 2>&1 || { echo "Error: missing $cmd"; return 1; }
@@ -84,7 +83,6 @@ function chad() {
 
   chezmoi add -- "${selected_items[@]}"
 }
-
 
 function chfo() {
   for cmd in chezmoi gum; do
@@ -168,7 +166,6 @@ function chfo() {
 
   chezmoi forget --force -- "${selected_paths[@]}"
 }
-
 
 function chra() {
   for cmd in chezmoi gum delta bat; do
