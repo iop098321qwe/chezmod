@@ -175,13 +175,19 @@ function chra() {
   echo "Previewing changes (reverse diff; scripts excluded):"
   echo "---------------------------------------------------"
 
-  if chezmoi diff --reverse -x scripts --no-pager --quiet >/dev/null 2>&1; then
+  local diff_output
+  if ! diff_output="$(chezmoi diff --reverse -x scripts --no-pager)"; then
+    echo "Error: diff preview command failed."
+    return 1
+  fi
+
+  if [ -z "$diff_output" ]; then
     echo "No file changes detected (with current diff filters)."
     return 0
   fi
 
   # chezmoi diff --reverse -x scripts --no-pager | delta | bat || {
-  chezmoi diff --reverse -x scripts --no-pager | delta || {
+  printf '%s\n' "$diff_output" | delta || {
     echo "Error: diff preview command failed."
     return 1
   }
