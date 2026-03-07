@@ -240,12 +240,40 @@ function chup() {
     fi
   done
 
+  local source_dir
+  if ! source_dir="$(chezmoi source-path)"; then
+    echo "Error: failed to determine chezmoi source path."
+    return 1
+  fi
+
+  local changelog_source
+  changelog_source="$source_dir/CHANGELOG.md"
+
+  local managed_output
+  if ! managed_output="$(chezmoi managed --path-style=source-absolute --exclude=scripts)"; then
+    echo "Error: failed to list managed files."
+    return 1
+  fi
+
+  local -a diff_targets=()
+  local managed_entry
+  while IFS= read -r managed_entry; do
+    [ -z "$managed_entry" ] && continue
+    [ "$managed_entry" = "$changelog_source" ] && continue
+    diff_targets+=("$managed_entry")
+  done <<< "$managed_output"
+
   echo "Previewing pending chezmoi changes before update:"
   echo "---------------------------------------------------"
 
   # --- Skip preview if nothing is pending ---
+  if [ "${#diff_targets[@]}" -eq 0 ]; then
+    echo "No local changes currently pending."
+    return 0
+  fi
+
   local diff_output
-  if ! diff_output="$(chezmoi diff -x scripts --no-pager)"; then
+  if ! diff_output="$(chezmoi diff -x scripts --source-path --no-pager -- "${diff_targets[@]}")"; then
     echo "Error: diff preview pipeline failed."
     return 1
   fi
