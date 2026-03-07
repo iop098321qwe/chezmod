@@ -244,7 +244,13 @@ function chup() {
   echo "---------------------------------------------------"
 
   # --- Skip preview if nothing is pending ---
-  if chezmoi diff -x scripts --no-pager --quiet >/dev/null 2>&1; then
+  local diff_output
+  if ! diff_output="$(chezmoi diff -x scripts --no-pager)"; then
+    echo "Error: diff preview pipeline failed."
+    return 1
+  fi
+
+  if [ -z "$diff_output" ]; then
     echo "No local changes currently pending."
   else
     if ! chezmoi diff -x scripts --no-pager | delta; then
