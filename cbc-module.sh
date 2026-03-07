@@ -253,7 +253,7 @@ function chup() {
   if [ -z "$diff_output" ]; then
     echo "No local changes currently pending."
   else
-    if ! chezmoi diff -x scripts --no-pager | delta; then
+    if ! printf '%s\n' "$diff_output" | delta; then
       echo "Error: diff preview pipeline failed."
       return 1
     fi
