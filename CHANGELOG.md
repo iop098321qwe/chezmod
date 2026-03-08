@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.9](https://github.com/iop098321qwe/chezmod/compare/v0.0.8...v0.0.9) (2026-03-08)
+
+
+### Bug Fixes
+
+* **function:** avoid --quiet in chra diff precheck ([84d67c5](https://github.com/iop098321qwe/chezmod/commit/84d67c5fa87d94b985c42291efad5b6d34ed3396))
+* **function:** avoid masked diff failures in chup ([04fac81](https://github.com/iop098321qwe/chezmod/commit/04fac8193e8bb00bbbf26dce4db6f09ca8e8252d))
+* **function:** exclude chezmoi changelog from chra diff ([d66b777](https://github.com/iop098321qwe/chezmod/commit/d66b777cb368cc1cd7bcb1ba9ac9bf3284f72fc9))
+* **function:** exclude chezmoi changelog from chup diff ([58d5ce7](https://github.com/iop098321qwe/chezmod/commit/58d5ce704b886478f059957668cfa3ceff6bbccc))
+* **function:** replace unsupported --quiet check in chup ([65f3af5](https://github.com/iop098321qwe/chezmod/commit/65f3af55f735483b1103abe1bc04d0073e53067a))
+
 ## [0.0.8](https://github.com/iop098321qwe/chezmod/compare/v0.0.7...v0.0.8) (2026-02-20)
 
 
