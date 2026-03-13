@@ -33,8 +33,11 @@ function chad() {
       return 0
     }
 
-    chezmoi add "$@"
-    return $?
+    if ! gum spin --title "Running: chezmoi add" --show-error -- chezmoi add "$@"; then
+      echo "Error: chezmoi add failed."
+      return 1
+    fi
+    return 0
   fi
 
   local globstar_set
@@ -97,7 +100,10 @@ function chad() {
     return 0
   }
 
-  chezmoi add -- "${selected_items[@]}"
+  if ! gum spin --title "Running: chezmoi add" --show-error -- chezmoi add -- "${selected_items[@]}"; then
+    echo "Error: chezmoi add failed."
+    return 1
+  fi
 }
 
 function chfo() {
