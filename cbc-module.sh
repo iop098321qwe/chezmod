@@ -111,8 +111,11 @@ function chfo() {
       return 0
     }
 
-    chezmoi forget --force -- "$@"
-    return $?
+    if ! gum spin --title "Running: chezmoi forget" --show-error -- chezmoi forget --force -- "$@"; then
+      echo "Error: chezmoi forget failed."
+      return 1
+    fi
+    return 0
   fi
 
   local current_dir
@@ -180,7 +183,10 @@ function chfo() {
     selected_paths+=("$path_prefix$item")
   done
 
-  chezmoi forget --force -- "${selected_paths[@]}"
+  if ! gum spin --title "Running: chezmoi forget" --show-error -- chezmoi forget --force -- "${selected_paths[@]}"; then
+    echo "Error: chezmoi forget failed."
+    return 1
+  fi
 }
 
 function chra() {
