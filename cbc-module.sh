@@ -33,8 +33,11 @@ function chad() {
       return 0
     }
 
-    chezmoi add "$@"
-    return $?
+    if ! gum spin --title "Running: chezmoi add" --show-error -- chezmoi add "$@"; then
+      echo "Error: chezmoi add failed."
+      return 1
+    fi
+    return 0
   fi
 
   local globstar_set
@@ -97,7 +100,10 @@ function chad() {
     return 0
   }
 
-  chezmoi add -- "${selected_items[@]}"
+  if ! gum spin --title "Running: chezmoi add" --show-error -- chezmoi add -- "${selected_items[@]}"; then
+    echo "Error: chezmoi add failed."
+    return 1
+  fi
 }
 
 function chfo() {
@@ -111,8 +117,11 @@ function chfo() {
       return 0
     }
 
-    chezmoi forget --force -- "$@"
-    return $?
+    if ! gum spin --title "Running: chezmoi forget" --show-error -- chezmoi forget --force -- "$@"; then
+      echo "Error: chezmoi forget failed."
+      return 1
+    fi
+    return 0
   fi
 
   local current_dir
@@ -180,7 +189,10 @@ function chfo() {
     selected_paths+=("$path_prefix$item")
   done
 
-  chezmoi forget --force -- "${selected_paths[@]}"
+  if ! gum spin --title "Running: chezmoi forget" --show-error -- chezmoi forget --force -- "${selected_paths[@]}"; then
+    echo "Error: chezmoi forget failed."
+    return 1
+  fi
 }
 
 function chra() {
@@ -243,8 +255,10 @@ function chra() {
     return 0
   }
 
-  echo "Running: chezmoi re-add"
-  chezmoi re-add
+ if ! gum spin --title "Running: chezmoi re-add" --show-error -- chezmoi re-add; then
+    echo "Error: chezmoi re-add failed."
+    return 1
+  fi
 }
 
 function chup() {
