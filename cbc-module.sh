@@ -3,8 +3,24 @@
 # chezmoi aliases
 alias ch='chezmoi'
 alias chap='gum confirm "Run chezmoi apply?" && chezmoi apply'
-alias chd='chezmoi cd'
 alias chdiff='chezmoi diff --reverse -x scripts --no-pager | delta'
+
+function chd() {
+  local source_dir
+  if ! source_dir="$(chezmoi source-path)"; then
+    echo "Error: failed to determine chezmoi source path."
+    return 1
+  fi
+
+  cd "$source_dir" || return 1
+
+  command -v yazi >/dev/null 2>&1 || {
+    echo "Error: missing yazi"
+    return 1
+  }
+
+  yazi
+}
 
 function chad() {
   for cmd in chezmoi gum; do
