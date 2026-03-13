@@ -243,8 +243,10 @@ function chra() {
     return 0
   }
 
-  echo "Running: chezmoi re-add"
-  chezmoi re-add
+ if ! gum spin --title "Running: chezmoi re-add" --show-error -- chezmoi re-add; then
+    echo "Error: chezmoi re-add failed."
+    return 1
+  fi
 }
 
 function chup() {
