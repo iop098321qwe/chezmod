@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.11](https://github.com/iop098321qwe/chezmod/compare/v0.0.10...v0.0.11) (2026-03-13)
+
+
+### Features
+
+* **chad:** add gum spinner ([dd9153a](https://github.com/iop098321qwe/chezmod/commit/dd9153af74b03d8ad3b5a9da60d786a4aefe3d06))
+* **chfo:** add gum spinner ([505109f](https://github.com/iop098321qwe/chezmod/commit/505109ffe609bd6352049d5b316e2f6915d975c6))
+* **chra:** add gum spinner ([5fd7220](https://github.com/iop098321qwe/chezmod/commit/5fd7220a4f81343bf5be11f9e027fceeaacc380d))
+
 ## [0.0.10](https://github.com/iop098321qwe/chezmod/compare/v0.0.9...v0.0.10) (2026-03-13)
 
 
