@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.10](https://github.com/iop098321qwe/chezmod/compare/v0.0.9...v0.0.10) (2026-03-13)
+
+
+### Features
+
+* **chd:** open yazi in chezmoi directory when using `chd` ([e39b7a9](https://github.com/iop098321qwe/chezmod/commit/e39b7a9850b7bc24f1e3e6bd9691962009a6b3f2))
+
 ## [0.0.9](https://github.com/iop098321qwe/chezmod/compare/v0.0.8...v0.0.9) (2026-03-08)
 
 
