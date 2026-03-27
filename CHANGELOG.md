@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.12](https://github.com/iop098321qwe/chezmod/compare/v0.0.11...v0.0.12) (2026-03-27)
+
+
+### Bug Fixes
+
+* **chra:** allow re-add with no changes ([931c32e](https://github.com/iop098321qwe/chezmod/commit/931c32e747420a3c6ed7238c8184f0e0a897330b))
+
 ## [0.0.11](https://github.com/iop098321qwe/chezmod/compare/v0.0.10...v0.0.11) (2026-03-13)
 
 
