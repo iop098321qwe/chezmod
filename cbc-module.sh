@@ -226,36 +226,44 @@ function chra() {
   echo "Previewing changes (reverse diff; scripts excluded):"
   echo "---------------------------------------------------"
 
+  local has_changes=false
+
   if [ "${#diff_targets[@]}" -eq 0 ]; then
     echo "No file changes detected (with current diff filters)."
-    return 0
-  fi
+  else
+    local diff_output
+    if ! diff_output="$(chezmoi diff --reverse -x scripts --source-path --no-pager -- "${diff_targets[@]}")"; then
+      echo "Error: diff preview command failed."
+      return 1
+    fi
 
-  local diff_output
-  if ! diff_output="$(chezmoi diff --reverse -x scripts --source-path --no-pager -- "${diff_targets[@]}")"; then
-    echo "Error: diff preview command failed."
-    return 1
+    if [ -z "$diff_output" ]; then
+      echo "No file changes detected (with current diff filters)."
+    else
+      # chezmoi diff --reverse -x scripts --no-pager | delta | bat || {
+      printf '%s\n' "$diff_output" | delta || {
+        echo "Error: diff preview command failed."
+        return 1
+      }
+      has_changes=true
+    fi
   fi
-
-  if [ -z "$diff_output" ]; then
-    echo "No file changes detected (with current diff filters)."
-    return 0
-  fi
-
-  # chezmoi diff --reverse -x scripts --no-pager | delta | bat || {
-  printf '%s\n' "$diff_output" | delta || {
-    echo "Error: diff preview command failed."
-    return 1
-  }
 
   echo "---------------------------------------------------"
 
-  gum confirm "Apply these changes with 'chezmoi re-add'?" || {
-    echo "Canceled. No changes applied."
-    return 0
-  }
+  if [ "$has_changes" = true ]; then
+    gum confirm "Apply these changes with 'chezmoi re-add'?" || {
+      echo "Canceled. No changes applied."
+      return 0
+    }
+  else
+    gum confirm "No changes detected. Run 'chezmoi re-add' anyway?" || {
+      echo "Canceled. No changes applied."
+      return 0
+    }
+  fi
 
- if ! gum spin --title "Running: chezmoi re-add" --show-error -- chezmoi re-add; then
+  if ! gum spin --title "Running: chezmoi re-add" --show-error -- chezmoi re-add; then
     echo "Error: chezmoi re-add failed."
     return 1
   fi
