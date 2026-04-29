@@ -7,7 +7,8 @@ Covers apply, diff preview, add or forget flows, and update or re-add actions.
 - `chd`: Open the chezmoi source directory in yazi.
 - `chad`: Add files to chezmoi with optional interactive selection.
 - `chfo`: Forget managed files from chezmoi with optional selection.
-- `chra`: Preview reverse diff and run `chezmoi re-add`.
+- `chra`: Preview reverse diff, sync the host-specific Hypr monitor template
+  when available, and run `chezmoi re-add`.
 - `chup`: Preview pending diff and run `chezmoi update` after confirmation.
 
 ## Aliases
