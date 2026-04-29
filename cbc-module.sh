@@ -201,10 +201,18 @@ function chra() {
   done
 
   local source_dir
+  local monitor_source
+  local monitor_hostname
+  local monitor_template_dir
+  local monitor_template_path
+  local monitor_sync_note=""
+
   if ! source_dir="$(chezmoi source-path)"; then
     echo "Error: failed to determine chezmoi source path."
     return 1
   fi
+
+  monitor_source="$HOME/.config/hypr/monitors.conf"
 
   local changelog_source
   changelog_source="$source_dir/CHANGELOG.md"
@@ -263,7 +271,31 @@ function chra() {
     }
   fi
 
+  if [ -f "$monitor_source" ]; then
+    if ! monitor_hostname="$(chezmoi execute-template '{{ .chezmoi.hostname }}')" || [ -z "$monitor_hostname" ]; then
+      monitor_sync_note="Note: failed to resolve the chezmoi hostname for $monitor_source, so it was not included in this update."
+    else
+      monitor_template_dir="$source_dir/.chezmoitemplates/hypr/monitors"
+      monitor_template_path="$monitor_template_dir/$monitor_hostname.conf"
+
+      if ! mkdir -p "$monitor_template_dir"; then
+        monitor_sync_note="Note: failed to prepare $monitor_template_dir for $monitor_source, so it was not included in this update."
+      elif ! cp "$monitor_source" "$monitor_template_path"; then
+        monitor_sync_note="Note: failed to copy $monitor_source to $monitor_template_path, so it was not included in this update."
+      fi
+    fi
+  fi
+
+  local readd_failed=false
   if ! gum spin --title "Running: chezmoi re-add" --show-error -- chezmoi re-add; then
+    readd_failed=true
+  fi
+
+  if [ -n "$monitor_sync_note" ]; then
+    echo "$monitor_sync_note"
+  fi
+
+  if [ "$readd_failed" = true ]; then
     echo "Error: chezmoi re-add failed."
     return 1
   fi
