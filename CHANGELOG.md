@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [0.0.13](https://github.com/iop098321qwe/chezmod/compare/v0.0.12...v0.0.13) (2026-04-29)
+
+
+### Features
+
+* **chra:** sync hypr monitor template before re-add ([2bd124f](https://github.com/iop098321qwe/chezmod/commit/2bd124f52b3de3a713329b6574a61c6a4d0677da))
+
 ## [0.0.12](https://github.com/iop098321qwe/chezmod/compare/v0.0.11...v0.0.12) (2026-03-27)
 
 
