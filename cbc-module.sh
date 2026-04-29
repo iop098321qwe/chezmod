@@ -280,7 +280,7 @@ function chra() {
 
       if ! mkdir -p "$monitor_template_dir"; then
         monitor_sync_note="Note: failed to prepare $monitor_template_dir for $monitor_source, so it was not included in this update."
-      elif ! cp "$monitor_source" "$monitor_template_path"; then
+      elif ! command cp -- "$monitor_source" "$monitor_template_path"; then
         monitor_sync_note="Note: failed to copy $monitor_source to $monitor_template_path, so it was not included in this update."
       fi
     fi
