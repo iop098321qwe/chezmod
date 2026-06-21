@@ -1,0 +1,30 @@
+{
+  "name": "chezmod",
+  "version": "0.0.13",
+  "description": "Helpers for managing a chezmoi dotfiles repo with gum-driven prompts. Covers apply, diff preview, add or forget flows, and update or re-add actions.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iop098321qwe/chezmod.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/iop098321qwe/chezmod/issues"
+  },
+  "homepage": "https://github.com/iop098321qwe/chezmod#readme",
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7"
+  }
+}
