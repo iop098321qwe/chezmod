@@ -1,6 +1,6 @@
 {
   "name": "chezmod",
-  "version": "1.0.0",
+  "version": "0.0.13",
   "description": "Helpers for managing a chezmoi dotfiles repo with gum-driven prompts. Covers apply, diff preview, add or forget flows, and update or re-add actions.",
   "main": "index.js",
   "directories": {
