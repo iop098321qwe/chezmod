@@ -294,6 +294,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cross-machine-re-add-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Cross-machine re-add safety
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -416,6 +438,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cross-machine-re-add-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Cross-machine re-add safety
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        Tests
+      </span>
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -447,8 +491,8 @@ Covers apply, diff preview, add or forget flows, and update or re-add actions.</
 <li><code>chd</code>: Open the chezmoi source directory in yazi.</li>
 <li><code>chad</code>: Add files to chezmoi with optional interactive selection.</li>
 <li><code>chfo</code>: Forget managed files from chezmoi with optional selection.</li>
-<li><code>chra</code>: Preview reverse diff, sync the host-specific Hypr monitor template
-  when available, and run <code>chezmoi re-add</code>.</li>
+<li><code>chra</code>: Check upstream freshness, preview reverse diff, sync the
+  host-specific Hypr monitor template when available, and run <code>chezmoi re-add</code>.</li>
 <li><code>chup</code>: Preview pending diff and run <code>chezmoi update</code> after confirmation.</li>
 </ul>
 <h2 id="aliases">Aliases<a class="headerlink" href="#aliases" title="Permanent link">&para;</a></h2>
@@ -457,6 +501,27 @@ Covers apply, diff preview, add or forget flows, and update or re-add actions.</
 <li><code>chap</code>: Confirm and run <code>chezmoi apply</code>.</li>
 <li><code>chdiff</code>: Show reverse diff (excluding scripts) through delta.</li>
 </ul>
+<h2 id="cross-machine-re-add-safety">Cross-machine re-add safety<a class="headerlink" href="#cross-machine-re-add-safety" title="Permanent link">&para;</a></h2>
+<p><code>chra</code> checks the Git repository at <code>chezmoi source-path</code>, fetching the current
+branch's configured upstream remote before comparing commits. It does not
+assume a remote or branch name, and never pulls, merges, or applies dotfiles
+automatically.</p>
+<p>If the branch is behind or diverged, <code>chra</code> warns and defaults to cancellation.
+The same confirmation is required when freshness cannot be verified, such as
+when offline, without Git or an upstream, on a detached HEAD, or using a
+non-Git source. You can explicitly continue anyway, then review the usual diff.
+Unresolved merge conflicts stop the operation without an override. Ahead-only
+branches and ordinary staged, unstaged, or untracked changes remain allowed.</p>
+<p>Re-add copies this machine's files back into the source repository. Git being
+up-to-date does <strong>not</strong> prove newer source changes have been applied locally;
+the diff cannot distinguish intentional edits from stale machine state.
+Review and reconcile source and machine changes before proceeding. All
+confirmations default to No; declining or unavailable confirmation prevents
+both the monitor-template copy and <code>chezmoi re-add</code>. Fetching may still update
+Git's remote-tracking metadata.</p>
+<h2 id="tests">Tests<a class="headerlink" href="#tests" title="Permanent link">&para;</a></h2>
+<p>Run <code>npm test</code> to exercise the guard with temporary local Git repositories and
+mocked interactive commands. Tests do not access real dotfiles or the network.</p>
 
 
 
