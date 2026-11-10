@@ -212,6 +212,51 @@ function chra() {
     return 1
   fi
 
+  # Fetch only: never pull or apply files before the user reviews the diff.
+  local sync_warning=""
+  local branch remote upstream counts ahead behind unmerged
+  if ! command -v git >/dev/null 2>&1; then
+    sync_warning="Git is unavailable; repository freshness cannot be verified."
+  elif [ "$(git -C "$source_dir" rev-parse --is-inside-work-tree 2>/dev/null)" != true ]; then
+    sync_warning="The chezmoi source is not a Git worktree; freshness cannot be verified."
+  elif ! unmerged="$(git -C "$source_dir" ls-files --unmerged)"; then
+    echo "Error: failed to check the chezmoi repository for merge conflicts."
+    return 1
+  elif [ -n "$unmerged" ]; then
+    echo "Error: resolve the chezmoi repository's merge conflicts before running chra."
+    return 1
+  elif ! branch="$(git -C "$source_dir" symbolic-ref --quiet --short HEAD)"; then
+    sync_warning="The chezmoi repository has a detached HEAD; freshness cannot be verified."
+  elif ! remote="$(git -C "$source_dir" config --get "branch.$branch.remote")" ||
+       ! git -C "$source_dir" config --get "branch.$branch.merge" >/dev/null; then
+    sync_warning="The current branch has no configured upstream; freshness cannot be verified."
+  elif ! gum spin --title "Checking chezmoi upstream" --show-error -- \
+       git -C "$source_dir" fetch --no-tags -- "$remote"; then
+    sync_warning="Fetching the chezmoi upstream failed; freshness cannot be verified."
+  elif ! upstream="$(git -C "$source_dir" rev-parse --verify '@{upstream}' 2>/dev/null)" ||
+       ! counts="$(git -C "$source_dir" rev-list --left-right --count "HEAD...$upstream")"; then
+    sync_warning="The chezmoi upstream could not be compared; freshness cannot be verified."
+  else
+    read -r ahead behind <<< "$counts"
+    if [ "$behind" -gt 0 ]; then
+      if [ "$ahead" -gt 0 ]; then
+        sync_warning="The chezmoi branch has diverged: $ahead local and $behind incoming commit(s)."
+      else
+        sync_warning="The chezmoi branch is behind its upstream by $behind commit(s)."
+      fi
+    fi
+  fi
+
+  if [ -n "$sync_warning" ]; then
+    printf 'Warning: %s\n' "$sync_warning"
+    echo "Re-add copies this machine's files into the source and may reintroduce stale settings."
+    echo "Review and reconcile source and machine changes before retrying; nothing is applied automatically."
+    gum confirm --default=false "Remote changes may not be reflected on this machine. Continue anyway?" || {
+      echo "Canceled. No source files changed."
+      return 0
+    }
+  fi
+
   monitor_source="$HOME/.config/hypr/monitors.conf"
 
   local changelog_source
@@ -260,12 +305,14 @@ function chra() {
   echo "---------------------------------------------------"
 
   if [ "$has_changes" = true ]; then
-    gum confirm "Apply these changes with 'chezmoi re-add'?" || {
+    echo "Warning: Git freshness does not prove source changes have been applied locally."
+    echo "Review this diff: it cannot distinguish intentional edits from stale machine state."
+    gum confirm --default=false "Apply these changes with 'chezmoi re-add'?" || {
       echo "Canceled. No changes applied."
       return 0
     }
   else
-    gum confirm "No changes detected. Run 'chezmoi re-add' anyway?" || {
+    gum confirm --default=false "No changes detected. Run 'chezmoi re-add' anyway?" || {
       echo "Canceled. No changes applied."
       return 0
     }
