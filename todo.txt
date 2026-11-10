@@ -1,0 +1,2 @@
+(A) 2026-11-09 I want `chra` to explain what red vs green means in the preview when using `chra` so it is more clear. #feat @feat
+(A) 2026-11-09 `chra` when an not fully up-to-date with the remote should provide the option to update first using `chezmoi update` before running `chra`. #feat @feat
